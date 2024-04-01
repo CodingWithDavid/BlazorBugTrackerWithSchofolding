@@ -1,0 +1,33 @@
+﻿@page "/userstories"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="userstories/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.UserStory">
+    <PropertyColumn Property="userstory => userstory.Points" />
+    <PropertyColumn Property="userstory => userstory.AsA" />
+    <PropertyColumn Property="userstory => userstory.IWant" />
+    <PropertyColumn Property="userstory => userstory.SoThat" />
+    <PropertyColumn Property="userstory => userstory.AcceptanceCriteria" />
+    <PropertyColumn Property="userstory => userstory.Name" />
+    <PropertyColumn Property="userstory => userstory.CreateDate" />
+    <PropertyColumn Property="userstory => userstory.ModifiedDate" />
+    <PropertyColumn Property="userstory => userstory.Reporter" />
+    <PropertyColumn Property="userstory => userstory.AssignedTo" />
+    <PropertyColumn Property="userstory => userstory.Priority" />
+    <PropertyColumn Property="userstory => userstory.Status" />
+
+    <TemplateColumn Context="userstory">
+        <a href="@($"userstories/edit?id={userstory.Id}")">Edit</a> |
+        <a href="@($"userstories/details?id={userstory.Id}")">Details</a> |
+        <a href="@($"userstories/delete?id={userstory.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

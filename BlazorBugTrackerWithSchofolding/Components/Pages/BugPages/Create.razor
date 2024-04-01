@@ -1,0 +1,83 @@
+﻿@page "/bugs/create"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>Bug</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Bug" OnValidSubmit="AddBug" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label> 
+                <InputText id="description" @bind-Value="Bug.Description" class="form-control" /> 
+                <ValidationMessage For="() => Bug.Description" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="stepstoreproduce" class="form-label">StepsToReproduce:</label> 
+                <InputText id="stepstoreproduce" @bind-Value="Bug.StepsToReproduce" class="form-control" /> 
+                <ValidationMessage For="() => Bug.StepsToReproduce" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label> 
+                <InputText id="name" @bind-Value="Bug.Name" class="form-control" /> 
+                <ValidationMessage For="() => Bug.Name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdate" class="form-label">CreateDate:</label> 
+                <InputDate id="createdate" @bind-Value="Bug.CreateDate" class="form-control" /> 
+                <ValidationMessage For="() => Bug.CreateDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="modifieddate" class="form-label">ModifiedDate:</label> 
+                <InputDate id="modifieddate" @bind-Value="Bug.ModifiedDate" class="form-control" /> 
+                <ValidationMessage For="() => Bug.ModifiedDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="reporter" class="form-label">Reporter:</label> 
+                <InputText id="reporter" @bind-Value="Bug.Reporter" class="form-control" /> 
+                <ValidationMessage For="() => Bug.Reporter" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="assignedto" class="form-label">AssignedTo:</label> 
+                <InputText id="assignedto" @bind-Value="Bug.AssignedTo" class="form-control" /> 
+                <ValidationMessage For="() => Bug.AssignedTo" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="priority" class="form-label">Priority:</label> 
+                <InputText id="priority" @bind-Value="Bug.Priority" class="form-control" /> 
+                <ValidationMessage For="() => Bug.Priority" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="status" class="form-label">Status:</label> 
+                <InputText id="status" @bind-Value="Bug.Status" class="form-control" /> 
+                <ValidationMessage For="() => Bug.Status" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/bugs">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Bug Bug { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddBug()
+    {
+        DB.Bug.Add(Bug);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/bugs");
+    }
+}

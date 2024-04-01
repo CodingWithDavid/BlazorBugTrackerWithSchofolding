@@ -1,0 +1,67 @@
+﻿@page "/defects/details"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Defect</h4>
+    <hr />
+    @if (defect is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Company</dt>
+            <dd class="col-sm-10">@defect.Company</dd>
+            <dt class="col-sm-2">Environment</dt>
+            <dd class="col-sm-10">@defect.Environment</dd>
+            <dt class="col-sm-2">FoundInVersion</dt>
+            <dd class="col-sm-10">@defect.FoundInVersion</dd>
+            <dt class="col-sm-2">Description</dt>
+            <dd class="col-sm-10">@defect.Description</dd>
+            <dt class="col-sm-2">StepsToReproduce</dt>
+            <dd class="col-sm-10">@defect.StepsToReproduce</dd>
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@defect.Name</dd>
+            <dt class="col-sm-2">CreateDate</dt>
+            <dd class="col-sm-10">@defect.CreateDate</dd>
+            <dt class="col-sm-2">ModifiedDate</dt>
+            <dd class="col-sm-10">@defect.ModifiedDate</dd>
+            <dt class="col-sm-2">Reporter</dt>
+            <dd class="col-sm-10">@defect.Reporter</dd>
+            <dt class="col-sm-2">AssignedTo</dt>
+            <dd class="col-sm-10">@defect.AssignedTo</dd>
+            <dt class="col-sm-2">Priority</dt>
+            <dd class="col-sm-10">@defect.Priority</dd>
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@defect.Status</dd>
+        </dl>
+        <div>
+            <a href="@($"/defects/edit?id={defect.Id}")">Edit</a> |
+            <a href="@($"/defects")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    Defect? defect;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        defect = await DB.Defect.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (defect is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

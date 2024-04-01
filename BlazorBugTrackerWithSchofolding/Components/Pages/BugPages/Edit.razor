@@ -1,0 +1,126 @@
+﻿@page "/Bugs/edit"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>Bug</h4>
+<hr />
+@if (Bug is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Bug" OnValidSubmit="UpdateBug" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Bug.Id" value="@Bug.Id" />
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="Bug.Description" class="form-control" />
+                    <ValidationMessage For="() => Bug.Description" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="stepstoreproduce" class="form-label">StepsToReproduce:</label>
+                    <InputText id="stepstoreproduce" @bind-Value="Bug.StepsToReproduce" class="form-control" />
+                    <ValidationMessage For="() => Bug.StepsToReproduce" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="Bug.Name" class="form-control" />
+                    <ValidationMessage For="() => Bug.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdate" class="form-label">CreateDate:</label>
+                    <InputDate id="createdate" @bind-Value="Bug.CreateDate" class="form-control" />
+                    <ValidationMessage For="() => Bug.CreateDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="modifieddate" class="form-label">ModifiedDate:</label>
+                    <InputDate id="modifieddate" @bind-Value="Bug.ModifiedDate" class="form-control" />
+                    <ValidationMessage For="() => Bug.ModifiedDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="reporter" class="form-label">Reporter:</label>
+                    <InputText id="reporter" @bind-Value="Bug.Reporter" class="form-control" />
+                    <ValidationMessage For="() => Bug.Reporter" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="assignedto" class="form-label">AssignedTo:</label>
+                    <InputText id="assignedto" @bind-Value="Bug.AssignedTo" class="form-control" />
+                    <ValidationMessage For="() => Bug.AssignedTo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="priority" class="form-label">Priority:</label>
+                    <InputText id="priority" @bind-Value="Bug.Priority" class="form-control" />
+                    <ValidationMessage For="() => Bug.Priority" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status:</label>
+                    <InputText id="status" @bind-Value="Bug.Status" class="form-control" />
+                    <ValidationMessage For="() => Bug.Status" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/bugs">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Bug? Bug { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Bug ??= await DB.Bug.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Bug is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task UpdateBug()
+    {
+        DB.Attach(Bug!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!BugExists(Bug!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/bugs");
+    }
+
+    bool BugExists(int id)
+    {
+        return DB.Bug.Any(e => e.Id == id);
+    }
+}

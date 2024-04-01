@@ -1,0 +1,33 @@
+﻿@page "/defects"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="defects/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Defect">
+    <PropertyColumn Property="defect => defect.Company" />
+    <PropertyColumn Property="defect => defect.Environment" />
+    <PropertyColumn Property="defect => defect.FoundInVersion" />
+    <PropertyColumn Property="defect => defect.Description" />
+    <PropertyColumn Property="defect => defect.StepsToReproduce" />
+    <PropertyColumn Property="defect => defect.Name" />
+    <PropertyColumn Property="defect => defect.CreateDate" />
+    <PropertyColumn Property="defect => defect.ModifiedDate" />
+    <PropertyColumn Property="defect => defect.Reporter" />
+    <PropertyColumn Property="defect => defect.AssignedTo" />
+    <PropertyColumn Property="defect => defect.Priority" />
+    <PropertyColumn Property="defect => defect.Status" />
+
+    <TemplateColumn Context="defect">
+        <a href="@($"defects/edit?id={defect.Id}")">Edit</a> |
+        <a href="@($"defects/details?id={defect.Id}")">Details</a> |
+        <a href="@($"defects/delete?id={defect.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

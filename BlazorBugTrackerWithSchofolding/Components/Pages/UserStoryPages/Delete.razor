@@ -1,0 +1,97 @@
+﻿@page "/userstories/delete"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UserStory</h4>
+    <hr />
+    @if (userstory is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Points</dt>
+            <dd class="col-sm-10">@userstory.Points</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">AsA</dt>
+            <dd class="col-sm-10">@userstory.AsA</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">IWant</dt>
+            <dd class="col-sm-10">@userstory.IWant</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">SoThat</dt>
+            <dd class="col-sm-10">@userstory.SoThat</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">AcceptanceCriteria</dt>
+            <dd class="col-sm-10">@userstory.AcceptanceCriteria</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@userstory.Name</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">CreateDate</dt>
+            <dd class="col-sm-10">@userstory.CreateDate</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ModifiedDate</dt>
+            <dd class="col-sm-10">@userstory.ModifiedDate</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Reporter</dt>
+            <dd class="col-sm-10">@userstory.Reporter</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">AssignedTo</dt>
+            <dd class="col-sm-10">@userstory.AssignedTo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Priority</dt>
+            <dd class="col-sm-10">@userstory.Priority</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@userstory.Status</dd>
+        </dl>
+        <EditForm method="post" Model="userstory" OnValidSubmit="DeleteUserStory" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(userstory is null)">Delete</button> |
+            <a href="/userstories">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    UserStory? userstory;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        userstory = await DB.UserStory.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (userstory is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    public async Task DeleteUserStory()
+    {
+        DB.UserStory.Remove(userstory!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/userstories");
+    }
+}

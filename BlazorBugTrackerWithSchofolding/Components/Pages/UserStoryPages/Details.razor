@@ -1,0 +1,67 @@
+﻿@page "/userstories/details"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>UserStory</h4>
+    <hr />
+    @if (userstory is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Points</dt>
+            <dd class="col-sm-10">@userstory.Points</dd>
+            <dt class="col-sm-2">AsA</dt>
+            <dd class="col-sm-10">@userstory.AsA</dd>
+            <dt class="col-sm-2">IWant</dt>
+            <dd class="col-sm-10">@userstory.IWant</dd>
+            <dt class="col-sm-2">SoThat</dt>
+            <dd class="col-sm-10">@userstory.SoThat</dd>
+            <dt class="col-sm-2">AcceptanceCriteria</dt>
+            <dd class="col-sm-10">@userstory.AcceptanceCriteria</dd>
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@userstory.Name</dd>
+            <dt class="col-sm-2">CreateDate</dt>
+            <dd class="col-sm-10">@userstory.CreateDate</dd>
+            <dt class="col-sm-2">ModifiedDate</dt>
+            <dd class="col-sm-10">@userstory.ModifiedDate</dd>
+            <dt class="col-sm-2">Reporter</dt>
+            <dd class="col-sm-10">@userstory.Reporter</dd>
+            <dt class="col-sm-2">AssignedTo</dt>
+            <dd class="col-sm-10">@userstory.AssignedTo</dd>
+            <dt class="col-sm-2">Priority</dt>
+            <dd class="col-sm-10">@userstory.Priority</dd>
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@userstory.Status</dd>
+        </dl>
+        <div>
+            <a href="@($"/userstories/edit?id={userstory.Id}")">Edit</a> |
+            <a href="@($"/userstories")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    UserStory? userstory;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        userstory = await DB.UserStory.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (userstory is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

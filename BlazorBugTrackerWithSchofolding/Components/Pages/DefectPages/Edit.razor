@@ -1,0 +1,141 @@
+﻿@page "/Defects/edit"
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>Defect</h4>
+<hr />
+@if (Defect is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Defect" OnValidSubmit="UpdateDefect" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Defect.Id" value="@Defect.Id" />
+                <div class="mb-3">
+                    <label for="company" class="form-label">Company:</label>
+                    <InputText id="company" @bind-Value="Defect.Company" class="form-control" />
+                    <ValidationMessage For="() => Defect.Company" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="environment" class="form-label">Environment:</label>
+                    <InputText id="environment" @bind-Value="Defect.Environment" class="form-control" />
+                    <ValidationMessage For="() => Defect.Environment" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="foundinversion" class="form-label">FoundInVersion:</label>
+                    <InputText id="foundinversion" @bind-Value="Defect.FoundInVersion" class="form-control" />
+                    <ValidationMessage For="() => Defect.FoundInVersion" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="Defect.Description" class="form-control" />
+                    <ValidationMessage For="() => Defect.Description" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="stepstoreproduce" class="form-label">StepsToReproduce:</label>
+                    <InputText id="stepstoreproduce" @bind-Value="Defect.StepsToReproduce" class="form-control" />
+                    <ValidationMessage For="() => Defect.StepsToReproduce" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="Defect.Name" class="form-control" />
+                    <ValidationMessage For="() => Defect.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdate" class="form-label">CreateDate:</label>
+                    <InputDate id="createdate" @bind-Value="Defect.CreateDate" class="form-control" />
+                    <ValidationMessage For="() => Defect.CreateDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="modifieddate" class="form-label">ModifiedDate:</label>
+                    <InputDate id="modifieddate" @bind-Value="Defect.ModifiedDate" class="form-control" />
+                    <ValidationMessage For="() => Defect.ModifiedDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="reporter" class="form-label">Reporter:</label>
+                    <InputText id="reporter" @bind-Value="Defect.Reporter" class="form-control" />
+                    <ValidationMessage For="() => Defect.Reporter" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="assignedto" class="form-label">AssignedTo:</label>
+                    <InputText id="assignedto" @bind-Value="Defect.AssignedTo" class="form-control" />
+                    <ValidationMessage For="() => Defect.AssignedTo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="priority" class="form-label">Priority:</label>
+                    <InputText id="priority" @bind-Value="Defect.Priority" class="form-control" />
+                    <ValidationMessage For="() => Defect.Priority" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status:</label>
+                    <InputText id="status" @bind-Value="Defect.Status" class="form-control" />
+                    <ValidationMessage For="() => Defect.Status" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/defects">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Defect? Defect { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Defect ??= await DB.Defect.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Defect is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task UpdateDefect()
+    {
+        DB.Attach(Defect!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!DefectExists(Defect!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/defects");
+    }
+
+    bool DefectExists(int id)
+    {
+        return DB.Defect.Any(e => e.Id == id);
+    }
+}

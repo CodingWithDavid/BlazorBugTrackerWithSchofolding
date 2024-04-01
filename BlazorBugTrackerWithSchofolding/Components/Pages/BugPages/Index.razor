@@ -1,0 +1,30 @@
+﻿@page "/bugs"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorBugTrackerWithSchofolding.Data.BlazorBugTrackerWithSchofoldingContext DB
+@using BlazorBugTrackerWithSchofolding.Models
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="bugs/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Bug">
+    <PropertyColumn Property="bug => bug.Description" />
+    <PropertyColumn Property="bug => bug.StepsToReproduce" />
+    <PropertyColumn Property="bug => bug.Name" />
+    <PropertyColumn Property="bug => bug.CreateDate" />
+    <PropertyColumn Property="bug => bug.ModifiedDate" />
+    <PropertyColumn Property="bug => bug.Reporter" />
+    <PropertyColumn Property="bug => bug.AssignedTo" />
+    <PropertyColumn Property="bug => bug.Priority" />
+    <PropertyColumn Property="bug => bug.Status" />
+
+    <TemplateColumn Context="bug">
+        <a href="@($"bugs/edit?id={bug.Id}")">Edit</a> |
+        <a href="@($"bugs/details?id={bug.Id}")">Details</a> |
+        <a href="@($"bugs/delete?id={bug.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
