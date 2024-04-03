@@ -4,7 +4,7 @@ I tried out the Balzor CRUD scaffolding feature in Visual Studio to see what it 
 
 Spoiler alert, I would.
 
-*** PLEASE NOTE THIS REQUIRES .NET 6 and Visual Studio 2022 ***
+*** PLEASE NOTE THIS REQUIRES .NET 8 and Visual Studio 2022 ***
 
 by [David Gallivan](http://twitter.com/CodingwithDavid)
 
@@ -25,8 +25,12 @@ by [David Gallivan](http://twitter.com/CodingwithDavid)
 
 1. Steps needed to prepare to use the feature
 2. How to use the feature using entity framework and SQLite
-3. A qucik tip on how to to entity framework migrations and DB update
+3. A quick tip on how to create entity framework migrations and DB update
 4. The final application as defined by the scaffolding.
+5. Using Data Annotations
+6. Using validation with the scaffolding tool
+7. Using the new AllowValues data annotations
+   
 
 ## Problems or Suggestions
 
