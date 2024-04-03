@@ -25,6 +25,7 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("AssignedTo")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreateDate")
@@ -32,11 +33,6 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -52,6 +48,7 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("Reporter")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
@@ -65,10 +62,67 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Bug");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Bug");
+            modelBuilder.Entity("BlazorBugTrackerWithSchofolding.Models.Defect", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.UseTphMappingStrategy();
+                    b.Property<string>("AssignedTo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Environment")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FoundInVersion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reporter")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StepsToReproduce")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Defect");
                 });
 
             modelBuilder.Entity("BlazorBugTrackerWithSchofolding.Models.UserStory", b =>
@@ -83,10 +137,12 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("AsA")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AssignedTo")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreateDate")
@@ -94,6 +150,7 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("IWant")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -112,10 +169,12 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
 
                     b.Property<string>("Reporter")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SoThat")
                         .IsRequired()
+                        .HasMaxLength(250)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
@@ -125,25 +184,6 @@ namespace BlazorBugTrackerWithSchofolding.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserStory");
-                });
-
-            modelBuilder.Entity("BlazorBugTrackerWithSchofolding.Models.Defect", b =>
-                {
-                    b.HasBaseType("BlazorBugTrackerWithSchofolding.Models.Bug");
-
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Environment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FoundInVersion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("Defect");
                 });
 #pragma warning restore 612, 618
         }
